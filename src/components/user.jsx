@@ -27,9 +27,19 @@ function getBageClasses(color) {
 function hendlerDelete(id) {
     setUsers((prevState) => prevState.filter((tag) => tag._id !== id))
 }
+function numberPeople() {
+   return (
+    users.length !== 0? 
+    <span class="badge bg-primary p-2 m-2">{users.length} человек тусанет с тобой сегодня</span>: 
+    <span class="badge bg-danger p-2 m-2">Никто с тобой не тусанет</span>
+   )
+    
+}
 
     return (
-        <>
+        <>  
+            {numberPeople()}
+
             <table className="table table-striped">
                 {displayTableHead()}
             <tbody>
