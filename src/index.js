@@ -1,14 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
-import Users from './components/user';
+import User from './components/user';
+import App from './App';
 import "bootstrap/dist/css/bootstrap.css"
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <Users />
-  </React.StrictMode>
-);
-
-reportWebVitals();
+root.render(<App />);
