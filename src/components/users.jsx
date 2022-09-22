@@ -1,35 +1,50 @@
-import React from "react"
-import User from "./user"
-function Users({users, ...rest}) {
-
+import React, { useState } from "react";
+import { paginate } from "../utils/paginate";
+import Pagination from "./pagination";
+import User from "./user";
+function Users({ users, ...rest }) {
+    const count = users.length;
+    const pageSize = 4;
+    const [currentPage, setCurrenPage] = useState(1);
+    const handlePageChange = (pageIndex) => {
+        setCurrenPage(pageIndex);
+    };
+    const userCrop = paginate(users, currentPage, pageSize);
     return (
         <>
-             <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Имя</th>
-                        <th scope="col">Качества</th>
-                        <th scope="col">Профессия</th>
-                        <th scope="col">Встретился, раз</th>
-                        <th scope="col">Оценка</th>
-                        <th scope="col">Избранное</th>
-                        <th />
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((use) => (
-                        <User
-                            key={use._id}
-                            {...use}
-                            onDelete={rest.onDelete}
-                            onToggleBookMar={rest.onToggleBookMar}
-                        />
-                    ))}
-                </tbody>
-            </table>
+            {count > 0 && (
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Имя</th>
+                            <th scope="col">Качества</th>
+                            <th scope="col">Профессия</th>
+                            <th scope="col">Встретился, раз</th>
+                            <th scope="col">Оценка</th>
+                            <th scope="col">Избранное</th>
+                            <th />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {userCrop.map((use) => (
+                            <User
+                                key={use._id}
+                                {...use}
+                                onDelete={rest.onDelete}
+                                onToggleBookMar={rest.onToggleBookMar}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+            )}
+            <Pagination
+                itemCount={count}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+            />
         </>
-        
-    )
+    );
 }
 
-export default Users
+export default Users;

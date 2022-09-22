@@ -1,11 +1,14 @@
-import React from "react"
+import React from "react";
+import PropTypes from "prop-types";
 
-function BookMark({ status, ...rest}){
-    if(status.bookmark === false){
-       return <div className="btn btn-light border border-dark" onClick={() => rest.onToggleBookMar(status._id)}><i className="bi bi-bookmark"></i></div>
-    } else if (status.bookmark === true) {
-        return <div className="btn btn-light border border-dark" onClick={() => rest.onToggleBookMar(status._id)}><i className="bi bi-bookmark-heart-fill"></i></div>
-    }
+function BookMark({ status, ...rest }) {
+    return (
+        <button {...rest}>
+            <i className={"bi bi-bookmark" + (status ? "-heart-fill" : "")}></i>
+        </button>
+    );
 }
-
-export default BookMark
+BookMark.propTypes = {
+    status: PropTypes.bool
+};
+export default BookMark;
