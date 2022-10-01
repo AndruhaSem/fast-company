@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function Qualitie({ color, name, _id }) {
     return (
@@ -7,5 +8,9 @@ function Qualitie({ color, name, _id }) {
         </span>
     );
 }
-
+Qualitie.propTypes = {
+    color: PropTypes.string,
+    name: PropTypes.string,
+    _id: PropTypes.string
+};
 export default Qualitie;
