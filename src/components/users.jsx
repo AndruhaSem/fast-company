@@ -21,6 +21,8 @@ function Users({ users, ...rest }) {
 
     function handleProfessionSelect(item) {
         setSelectedProf(item);
+        console.log(item);
+        console.log(selectedProf);
     }
 
     const handlePageChange = (pageIndex) => {
