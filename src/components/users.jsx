@@ -21,15 +21,13 @@ function Users({ users, ...rest }) {
 
     function handleProfessionSelect(item) {
         setSelectedProf(item);
-        console.log(item);
-        console.log(selectedProf);
     }
 
     const handlePageChange = (pageIndex) => {
         setCurrenPage(pageIndex);
     };
     const filteredUsers = selectedProf
-        ? users.filter((user) => user.profession === selectedProf)
+        ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
         : users;
 
     const count = filteredUsers.length;
