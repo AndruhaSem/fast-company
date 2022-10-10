@@ -13,7 +13,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
         }
     }
     function name(item) {
-        if (item) {
+        if (selectedSort.path === item) {
             if (selectedSort.order === "asc") {
                 return "bi bi-caret-up-fill";
             } else {
