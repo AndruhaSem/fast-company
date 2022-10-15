@@ -36,7 +36,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                         scope="col"
                     >
                         {columns[column].name}
-                        <i className={name(columns[column].path)} ></i>
+                        <i className={name(columns[column].path)}></i>
                     </th>
                 ))}
             </tr>
