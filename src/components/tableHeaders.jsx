@@ -12,7 +12,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             onSort({ path: item, order: "asc" });
         }
     }
-    function name(item) {
+    function handleAddIcons(item) {
         if (selectedSort.path === item) {
             if (selectedSort.order === "asc") {
                 return "bi bi-caret-up-fill";
@@ -36,7 +36,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                         scope="col"
                     >
                         {columns[column].name}
-                        <i className={name(columns[column].path)}></i>
+                        <i className={handleAddIcons(columns[column].path)}></i>
                     </th>
                 ))}
             </tr>
