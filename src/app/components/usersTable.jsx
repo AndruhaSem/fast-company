@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import BookMark from "./bookmark";
 import QualitiesList from "./qualitiesList";
 import Table from "./table";
+import { Link } from "react-router-dom";
 
 const UserTable = ({
     users,
@@ -12,10 +13,16 @@ const UserTable = ({
     onToggleBookMar
 }) => {
     const columns = {
-        name: { path: "name", name: "Имя" },
+        name: {
+            path: "name",
+            name: "Имя",
+            component: (user) => (
+                <Link to={`/users/${user._id}`}>{user.name}</Link>
+            )
+        },
         qualities: {
             name: "Качества",
-            component: (users) => <QualitiesList qualities={users.qualities} />
+            component: (user) => <QualitiesList qualities={user.qualities} />
         },
         professions: { path: "profession.name", name: "Профессия" },
         completedMeetings: {
@@ -26,17 +33,17 @@ const UserTable = ({
         bookmark: {
             path: "bookmark",
             name: "Избранное",
-            component: (users) => (
+            component: (user) => (
                 <BookMark
-                    status={users.bookmark}
-                    onClick={() => onToggleBookMar(users._id)}
+                    status={user.bookmark}
+                    onClick={() => onToggleBookMar(user._id)}
                 />
             )
         },
         delete: {
-            component: (users) => (
+            component: (user) => (
                 <button
-                    onClick={() => onDelete(users._id)}
+                    onClick={() => onDelete(user._id)}
                     className="btn btn-danger"
                 >
                     delete
