@@ -99,6 +99,7 @@ function UsersList() {
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
         function clearFilter() {
             setSelectedProf();
+            setData({ name: "" });
         }
 
         return (
