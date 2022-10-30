@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { paginate } from "../utils/paginate";
-import Pagination from "./pagination";
-import SearchStatus from "./searchStatus";
-import api from "../api/index";
-import TextField from "./textField";
+import { paginate } from "../../../utils/paginate";
+import Pagination from "../../common/pagination";
+import SearchStatus from "../../ui/searchStatus";
+import api from "../../../api";
 import _ from "lodash";
-import GroupList from "./groupList";
+import GroupList from "../../common/groupList";
 import PropTypes from "prop-types";
-import UserTable from "./usersTable";
-function UsersList() {
+import UserTable from "../../ui/usersTable";
+function UsersListPage() {
     const [currentPage, setCurrenPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
-    const [data, setData] = useState({ name: "" });
+    const [serchQuery, setSerchQuery] = useState("");
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
     const [users, setUsers] = useState();
@@ -45,18 +44,15 @@ function UsersList() {
 
     useEffect(() => {
         setCurrenPage(1);
-    }, [selectedProf]);
+    }, [selectedProf, serchQuery]);
 
     function handleProfessionSelect(item) {
+        if (serchQuery !== "") setSerchQuery("");
         setSelectedProf(item);
-        setData({ name: "" });
     }
-    function handleChange({ target }) {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-        setSelectedProf();
+    function handleSearchQuery({ target }) {
+        setSelectedProf(undefined);
+        setSerchQuery(target.value);
     }
 
     const handlePageChange = (pageIndex) => {
@@ -68,27 +64,20 @@ function UsersList() {
     }
 
     if (users) {
-        function getMatch(user, str) {
-            const reg = new RegExp(str.split("").join(".*"), "i");
-
-            return user.filter((item) => {
-                if (item.name.match(reg)) {
-                    return item;
-                } else {
-                    return false;
-                }
-            });
-        }
-
-        const nameUse = data ? getMatch(users, data.name) : users;
-        console.log(nameUse);
-        const filteredUsers = selectedProf
+        const filteredUsers = serchQuery
+            ? users.filter(
+                  (user) =>
+                      user.name
+                          .toLowerCase()
+                          .indexOf(serchQuery.toLowerCase()) !== -1
+              )
+            : selectedProf
             ? users.filter(
                   (user) =>
                       JSON.stringify(user.profession) ===
                       JSON.stringify(selectedProf)
               )
-            : nameUse;
+            : users;
 
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
@@ -99,7 +88,7 @@ function UsersList() {
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
         function clearFilter() {
             setSelectedProf();
-            setData({ name: "" });
+            if (serchQuery !== "") setSerchQuery("");
         }
 
         return (
@@ -121,11 +110,12 @@ function UsersList() {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus lenght={count} />
-                    <TextField
-                        name="name"
-                        value={data.name}
-                        onChange={handleChange}
-                        text="Search..."
+                    <input
+                        type="text"
+                        name="searchQuery"
+                        placeholder="Search..."
+                        onChange={handleSearchQuery}
+                        value={serchQuery}
                     />
                     {count > 0 && (
                         <UserTable
@@ -150,8 +140,8 @@ function UsersList() {
     }
     return "loging...";
 }
-UsersList.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.array
 };
 
-export default UsersList;
+export default UsersListPage;

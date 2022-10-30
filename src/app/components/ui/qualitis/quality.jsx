@@ -1,16 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function Qualitie({ color, name, _id }) {
+function Quality({ color, name, _id }) {
     return (
         <span className={"badge m-1 bg-" + color} key={_id}>
             {name}
         </span>
     );
 }
-Qualitie.propTypes = {
+Quality.propTypes = {
     color: PropTypes.string,
     name: PropTypes.string,
     _id: PropTypes.string
 };
-export default Qualitie;
+export default Quality;

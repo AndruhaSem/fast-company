@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-const TextField = ({ label, type, name, value, onChange, error, text }) => {
+const TextField = ({ label, type, name, value, onChange, error }) => {
     const [showPassword, setShowPassword] = useState(false);
     function getInputClasses() {
         return "form-control" + (error ? " is-invalid" : "");
@@ -20,7 +20,6 @@ const TextField = ({ label, type, name, value, onChange, error, text }) => {
                     onChange={onChange}
                     name={name}
                     className={getInputClasses()}
-                    placeholder={text}
                 />
                 {type === "password" && (
                     <button
@@ -49,8 +48,7 @@ TextField.propTypes = {
     name: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func,
-    error: PropTypes.string,
-    text: PropTypes.string
+    error: PropTypes.string
 };
 
 export default TextField;
