@@ -27,26 +27,24 @@ const EditForm = () => {
         api.professions.fetchAll().then((data) => setProfessions(data));
         api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
-    // if (professions && qualities) {
-    //     const profe = professions.filter(
-    //         (user) => user._id === data.profession
-    //     );
-    //     num.profession = profe;
-    // Object.keys(qualities).map((qualiti) =>
-    //     let mreg = data.qualities.map((qualit)=> qualit.value)
-    //     console.log(mreg)
-    //     console.log(qualities[qualiti]._id)
-    // );
-    // }
-    // useEffect(() => {
-    //     const profe = professions.filter(
-    //         (user) => user._id === data.profession
-    //     );
-    //     console.log(profe);
-    // }, [professions]);
+    const qualiti = [];
     function handleSave() {
+        name();
         api.users.update(userId, data);
         history.push(`/users/${userId}`);
+    }
+    function name() {
+        const profe = professions.find((user) => user._id === data.profession);
+
+        for (const id of data.qualities) {
+            const array = Object.keys(qualities).find(
+                (user) => qualities[user]._id === id.value
+            );
+            qualiti.push(qualities[array]);
+        }
+
+        data.profession = profe;
+        data.qualities = qualiti;
     }
     function handleChange(target) {
         setData((prevState) => ({

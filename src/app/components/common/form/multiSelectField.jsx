@@ -11,14 +11,7 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
               }))
             : options;
     function handleChange(value) {
-        const i = [];
-        for (const num of value) {
-            const mer = Object.keys(options).find(
-                (user) => options[user]._id === num.value
-            );
-            i.push(options[mer]);
-        }
-        onChange({ name, value: i });
+        onChange({ name, value });
     }
     return (
         <div className="mb-4">
