@@ -18,18 +18,7 @@ const EditForm = () => {
         sex: "male",
         qualities: []
     });
-    const num = {
-        id: userId,
-        name: data.name,
-        email: data.email,
-        sex: data.sex,
-        profession: "",
-        qualities: data.qualities,
-        completedMeetings: 434,
-        rate: 5,
-        bookmark: false
-    };
-    console.log(num);
+    console.log(data);
     const history = useHistory();
     const [qualities, setQualities] = useState();
     const [professions, setProfessions] = useState();
@@ -38,17 +27,17 @@ const EditForm = () => {
         api.professions.fetchAll().then((data) => setProfessions(data));
         api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
-    if (professions && qualities) {
-        const profe = professions.filter(
-            (user) => user._id === data.profession
-        );
-        num.profession = profe;
-        // Object.keys(qualities).map((qualiti) =>
-        //     let mreg = data.qualities.map((qualit)=> qualit.value)
-        //     console.log(mreg)
-        //     console.log(qualities[qualiti]._id)
-        // );
-    }
+    // if (professions && qualities) {
+    //     const profe = professions.filter(
+    //         (user) => user._id === data.profession
+    //     );
+    //     num.profession = profe;
+    // Object.keys(qualities).map((qualiti) =>
+    //     let mreg = data.qualities.map((qualit)=> qualit.value)
+    //     console.log(mreg)
+    //     console.log(qualities[qualiti]._id)
+    // );
+    // }
     // useEffect(() => {
     //     const profe = professions.filter(
     //         (user) => user._id === data.profession
@@ -56,7 +45,7 @@ const EditForm = () => {
     //     console.log(profe);
     // }, [professions]);
     function handleSave() {
-        // api.users.update(userId, num);
+        api.users.update(userId, data);
         history.push(`/users/${userId}`);
     }
     function handleChange(target) {
@@ -64,6 +53,7 @@ const EditForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
+        console.log(target.value);
     }
     const validatorConfig = {
         email: {

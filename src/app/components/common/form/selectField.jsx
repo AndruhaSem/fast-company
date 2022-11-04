@@ -11,7 +11,9 @@ const SelectField = ({
     error
 }) => {
     function handleChange({ target }) {
-        onChange({ name: target.name, value: target.value });
+        const profe = options.find((user) => user._id === target.value);
+        onChange({ name: target.name, value: profe });
+        // onChange({ name: target.name, value: target.value });
     }
     function getInputClasses() {
         return "form-select" + (error ? " is-invalid" : "");
