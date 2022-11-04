@@ -3,19 +3,27 @@ import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import api from "../../api";
 import SelectField from "../common/form/selectField";
+import RadioFild from "../common/form/radioFild";
+import MultiSelectField from "../common/form/multiSelectField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
         email: "",
         password: "",
-        profession: ""
+        profession: "",
+        sex: "male",
+        qualities: [],
+        licence: false
     });
+    const [qualities, setQualities] = useState();
     const [professions, setProfessions] = useState();
     const [errors, setErrors] = useState({});
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
+        api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
-    function handleChange({ target }) {
+    function handleChange(target) {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
@@ -48,6 +56,12 @@ const RegisterForm = () => {
         profession: {
             isRequired: {
                 message: "Обязательно выберете вашу профессию"
+            }
+        },
+        licence: {
+            isRequired: {
+                message:
+                    "Вы не можите использовать наш сервис без подтверждения лицензионного соглашения"
             }
         }
     };
@@ -86,11 +100,38 @@ const RegisterForm = () => {
             <SelectField
                 label="Выбери свою профессию"
                 defaultOption="Choose..."
+                name="profession"
                 options={professions}
                 onChange={handleChange}
                 value={data.profession}
                 error={errors.profession}
             />
+            <RadioFild
+                options={[
+                    { name: "Male", value: "male" },
+                    { name: "Female", value: "female" },
+                    { name: "Other", value: "other" }
+                ]}
+                value={data.sex}
+                name="sex"
+                onChange={handleChange}
+                label="Выберите ваш пол"
+            />
+            <MultiSelectField
+                options={qualities}
+                onChange={handleChange}
+                defaultValue={data.qualities}
+                name="qualities"
+                label="Выберите ваши качества"
+            />
+            <CheckBoxField
+                value={data.licence}
+                onChange={handleChange}
+                name="licence"
+                error={errors.licence}
+            >
+                Подтвердить <a>лицензионное соглашение</a>
+            </CheckBoxField>
             <button
                 type="submit"
                 disabled={!isValid}

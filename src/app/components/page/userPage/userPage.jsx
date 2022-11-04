@@ -1,19 +1,16 @@
 import { React, useState, useEffect } from "react";
 import api from "../../../api";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
 import Qualities from "../../ui/qualitis";
+import { Link } from "react-router-dom";
 
 const UserPage = ({ id }) => {
     const [user, setUser] = useState();
-    const history = useHistory();
+
     useEffect(() => {
         api.users.getById(id).then((data) => setUser(data));
     }, []);
 
-    function handleSave() {
-        history.replace("/users");
-    }
     if (user) {
         return (
             <div>
@@ -22,7 +19,9 @@ const UserPage = ({ id }) => {
                 <Qualities qualities={user.qualities} />
                 <p>{`completedMeetings: ${user.completedMeetings}`}</p>
                 <h2>{`Rate: ${user.rate}`}</h2>
-                <button onClick={() => handleSave()}>Все Пользователи</button>
+                <Link to={`/users/${user._id}/edit`}>
+                    <button>Изменить</button>
+                </Link>
             </div>
         );
     }
