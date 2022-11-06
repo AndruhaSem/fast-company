@@ -9,6 +9,7 @@ import NameField from "../common/form/nameField";
 import { useParams, useHistory } from "react-router-dom";
 
 const EditForm = () => {
+    const qualiti = [];
     const params = useParams();
     const { userId } = params;
     const [data, setData] = useState({
@@ -18,7 +19,6 @@ const EditForm = () => {
         sex: "male",
         qualities: []
     });
-    console.log(data);
     const history = useHistory();
     const [qualities, setQualities] = useState();
     const [professions, setProfessions] = useState();
@@ -27,13 +27,13 @@ const EditForm = () => {
         api.professions.fetchAll().then((data) => setProfessions(data));
         api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
-    const qualiti = [];
     function handleSave() {
-        name();
+        searchUserInformation();
         api.users.update(userId, data);
         history.push(`/users/${userId}`);
     }
-    function name() {
+
+    function searchUserInformation() {
         const profe = professions.find((user) => user._id === data.profession);
 
         for (const id of data.qualities) {
@@ -51,7 +51,6 @@ const EditForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
-        console.log(target.value);
     }
     const validatorConfig = {
         email: {
