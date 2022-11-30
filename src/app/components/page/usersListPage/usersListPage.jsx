@@ -7,6 +7,7 @@ import _ from "lodash";
 import GroupList from "../../common/groupList";
 import PropTypes from "prop-types";
 import UserTable from "../../ui/usersTable";
+import { useUser } from "../../../hooks/useUsers";
 function UsersListPage() {
     const [currentPage, setCurrenPage] = useState(1);
     const [professions, setProfessions] = useState();
@@ -14,28 +15,23 @@ function UsersListPage() {
     const [serchQuery, setSerchQuery] = useState("");
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
-    const [users, setUsers] = useState();
-
-    useEffect(() => {
-        api.users.fetchAll().then((data) => setUsers(data));
-    }, []);
+    const { users } = useUser();
 
     function handleDelete(userId) {
-        setUsers(users.filter((user) => user._id !== userId));
+        // setUsers(users.filter((user) => user._id !== userId));
+        console.log(userId);
     }
     function handleToggleBookMar(id) {
-        setUsers((prevState) =>
-            prevState.map((user) => {
-                if (user._id === id) {
-                    if (user.bookmark === true) {
-                        user.bookmark = false;
-                    } else {
-                        user.bookmark = true;
-                    }
+        users.map((user) => {
+            if (user._id === id) {
+                if (user.bookmark === true) {
+                    user.bookmark = false;
+                } else {
+                    user.bookmark = true;
                 }
-                return user;
-            })
-        );
+            }
+            return user;
+        });
     }
 
     useEffect(() => {
