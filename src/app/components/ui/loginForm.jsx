@@ -2,24 +2,26 @@ import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import CheckBoxField from "../common/form/checkBoxField";
-import { useAuthIn } from "../../hooks/useAuthIn";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 // import * as yup from "yup";
 
 const LoginForm = () => {
     const history = useHistory();
-    const { signIn } = useAuthIn();
+    const { logIn } = useAuth();
     const [data, setData] = useState({
         email: "",
         password: "",
         stayOn: false
     });
     const [errors, setErrors] = useState({});
+    const [enterError, setEnterError] = useState(null);
     function handleChange(target) {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
+        setEnterError(null);
     }
     // const validateScheme = yup.object().shape({
     //     password: yup
@@ -50,24 +52,11 @@ const LoginForm = () => {
         email: {
             isRequired: {
                 message: "Электронная почта обязательна для заполнения"
-            },
-            isEmail: {
-                message: "Email введен некорректно"
             }
         },
         password: {
             isRequired: {
                 message: "Пароль обязателен для заполнения"
-            },
-            isCapitalSymbol: {
-                message: "Пароль должен содержать хотя бы одну заглавную букву"
-            },
-            isContainDigit: {
-                message: "Пароль должен содержать хотя бы одно число"
-            },
-            min: {
-                message: "Пароль должен состоять минимум из 8 символов",
-                value: 8
             }
         }
     };
@@ -89,10 +78,14 @@ const LoginForm = () => {
         const isValid = validate();
         if (!isValid) return;
         try {
-            await signIn(data);
-            history.push("/");
+            await logIn(data);
+            history.push(
+                history.location.state
+                    ? history.location.state.from.pathname
+                    : "/"
+            );
         } catch (error) {
-            setErrors(error);
+            setEnterError(error.message);
         }
     }
     return (
@@ -119,9 +112,10 @@ const LoginForm = () => {
             >
                 Оставатся в системе
             </CheckBoxField>
+            {enterError && <p className="text-dange">{enterError}</p>}
             <button
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || enterError}
                 className="btn btn-primary w-100 mx-auto"
             >
                 Submit
