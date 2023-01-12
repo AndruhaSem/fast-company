@@ -20,12 +20,26 @@ const commentsSlice = createSlice({
         commentsRequestFailed: (state, action) => {
             state.error = action.payload;
             state.isLoading = false;
+        },
+        commentsCreated: (state, action) => {
+            state.entities.push(action.payload);
+        },
+        commentsRemove: (state, action) => {
+            state.entities = state.entities.filter(
+                (el) => el._id !== action.payload
+            );
         }
     }
 });
 
 const { reducer: commentsReducer, actions } = commentsSlice;
-const { commentsRequested, commentsReceived, commentsRequestFailed } = actions;
+const {
+    commentsRequested,
+    commentsReceived,
+    commentsRequestFailed,
+    commentsCreated,
+    commentsRemove
+} = actions;
 
 export const loadCommentsList = (userId) => async (dispatch) => {
     dispatch(commentsRequested());
@@ -38,9 +52,10 @@ export const loadCommentsList = (userId) => async (dispatch) => {
 };
 
 export const deleteComments = (userId) => async (dispatch) => {
+    console.log(userId);
     try {
-        const { content } = await commentService.removeComment(userId);
-        dispatch(commentsReceived(content));
+        await commentService.removeComment(userId);
+        dispatch(commentsRemove(userId));
     } catch (error) {
         dispatch(commentsRequestFailed(error.message));
     }
@@ -57,7 +72,7 @@ export const createCommentt =
         };
         try {
             const { content } = await commentService.createComment(comment);
-            dispatch(commentsReceived(content));
+            dispatch(commentsCreated(content));
         } catch (error) {
             dispatch(commentsRequestFailed(error.message));
         }
